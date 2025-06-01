@@ -1,54 +1,40 @@
-# React + TypeScript + Vite
+# 랜덤 뽑기 코인샵
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 랜덤 코인 뽑기 기능으로 유저가 코인을 획득하고, 획득한 코인으로 상품을 구매할 수 있는 간단한 미니 프로젝트 서비스
 
-Currently, two official plugins are available:
+## 개발 환경
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| 패키지명          | 버전    |
+| ----------------- | ------- |
+| @tailwindcss/vite | ^4.1.8  |
+| react             | ^19.1.0 |
+| react-dom         | ^19.1.0 |
+| react-router-dom  | ^6.22.3 |
+| tailwindcss       | ^4.1.8  |
+| zustand           | ^5.0.5  |
 
-## Expanding the ESLint configuration
+## 기능
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 상품구매
+  - `zustand`의 미들웨어인 `persist` 사용
+  - 직접 로컬스토리지에 저장하지 않고 미들웨어를 사용해 전역상태를 자동으로 `localStorage`에 저장하고 복원하는 기능으로 사용했다.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
+```javascript
+persist(store, {
+  name: "your-key-name", // localStorage의 key 이름
+  storage: createJSONStorage(() => sessionStorage), // 기본은 localStorage
+  partialize: (state) => ({ purchases: state.purchases }), // 저장할 필드 선택
+  version: 1,
+  onRehydrateStorage: () => (state) => {
+    console.log("스토어 복원됨", state);
   },
-})
+});
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+| 옵션               | 설명                                              |
+| ------------------ | ------------------------------------------------- |
+| name               | localStorage에 저장될 키 이름                     |
+| storage            | 기본은 localStorage, sessionStorage로도 설정 가능 |
+| partialize         | 저장할 상태 중 필요한 부분만 선택 가능            |
+| version            | 상태 마이그레이션 시 유용                         |
+| onRehydrateStorage | 복원 직전/후 후처리 (디버깅용)                    |
