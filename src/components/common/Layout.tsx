@@ -1,10 +1,12 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
+import { useCoinStore } from "../../store/coinStore";
 
 export default function Layout() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const logout = useAuthStore((state) => state.logout);
+  const coins = useCoinStore((state) => state.coins);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -32,7 +34,7 @@ export default function Layout() {
             <Link to={"/login"}>로그인</Link>
           )}
         </nav>
-        {isLoggedIn && <div className="text-sm">💰 내 코인: 0개</div>}
+        {isLoggedIn && <div className="text-sm">💰 내 코인: {coins}개</div>}
       </header>
       <main className="p-4">
         <Outlet />
