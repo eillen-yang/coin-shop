@@ -15,9 +15,10 @@
 
 ## 기능
 
-- 상품구매
-  - `zustand`의 미들웨어인 `persist` 사용
-  - 직접 로컬스토리지에 저장하지 않고 미들웨어를 사용해 전역상태를 자동으로 `localStorage`에 저장하고 복원하는 기능으로 사용했다.
+### 상품구매
+
+- `zustand`의 미들웨어인 `persist` 사용
+- 직접 로컬스토리지에 저장하지 않고 미들웨어를 사용해 전역상태를 자동으로 `localStorage`에 저장하고 복원하는 기능으로 사용했다.
 
 ```javascript
 persist(store, {
@@ -38,3 +39,25 @@ persist(store, {
 | partialize         | 저장할 상태 중 필요한 부분만 선택 가능            |
 | version            | 상태 마이그레이션 시 유용                         |
 | onRehydrateStorage | 복원 직전/후 후처리 (디버깅용)                    |
+
+### 카테고리 통계
+
+```javascript
+/* utils/statistics.ts */
+
+import type { Product } from "../data/products";
+
+export function getCategoryStats(purchaseHistory: Product[]) {
+  return (
+    purchaseHistory.reduce < Record < string,
+    number >>
+      ((acc, product) => {
+        acc[product.category] = (acc[product.category] || 0) + product.price;
+        return acc;
+      },
+      {})
+  );
+}
+```
+
+![GPT에게 물어본 이 코드의 설명](https://chatgpt.com/share/683bff97-f518-800d-968f-a82bcbfebfda)
