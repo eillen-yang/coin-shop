@@ -60,7 +60,7 @@ export function getCategoryStats(purchaseHistory: Product[]) {
 }
 ```
 
-![GPT에게 물어본 이 코드의 설명](https://chatgpt.com/share/683bff97-f518-800d-968f-a82bcbfebfda)
+[GPT에게 물어본 이 코드의 설명](https://chatgpt.com/share/683bff97-f518-800d-968f-a82bcbfebfda)
 
 ### 마이페이지 구매내역 정렬
 
