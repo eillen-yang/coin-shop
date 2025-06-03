@@ -1,3 +1,5 @@
+import { FilterableTable } from "../components/common/FilterableTable";
+import type { Product } from "../data/products";
 import { useCoinStore } from "../store/coinStore";
 import { usePurchaseStore } from "../store/purchaseStore";
 import { getCategoryStats } from "../utils/statistics";
@@ -75,6 +77,15 @@ export default function MyPage() {
           ))}
         </ul>
       )}
+
+      <FilterableTable<Product>
+        data={purchases}
+        columns={[
+          { key: "name", label: "상품명", sortable: true },
+          { key: "category", label: "카테고리", sortable: true },
+          { key: "price", label: "가격", sortable: true },
+        ]}
+      />
     </div>
   );
 }
