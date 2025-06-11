@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { useCoinStore } from "../store/coinStore";
+import GenericForm from "../components/common/GenericForm";
+
+type SimpleProduct = {
+  name: string;
+  price: number;
+};
 
 export default function HomePage() {
   const { addCoins } = useCoinStore();
@@ -30,6 +36,18 @@ export default function HomePage() {
       >
         🎁 뽑기 도전
       </button>
+
+      <GenericForm<SimpleProduct>
+        initialData={{ name: "", price: 0 }}
+        fields={[
+          { key: "name", label: "상품명", type: "text" },
+          { key: "price", label: "가격", type: "number" },
+        ]}
+        onSubmit={(data) => {
+          console.log("등록된 상품:", data);
+          alert(`"${data.name}" 상품이 등록되었습니다.`);
+        }}
+      />
     </div>
   );
 }
